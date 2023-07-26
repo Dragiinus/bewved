@@ -1,13 +1,22 @@
 import '@/App.css';
-import { BrowserRouter } from 'react-router-dom';
-import Routing from '@/pages/Routing';
+import AddStudent from './student/AddStudent';
+import Axios from 'axios';
+
 
 function App() {
+  Axios({
+    method: "GET",
+    url: "http://localhost:5000/api",
+    headers: {
+      "Content-Type": "application/json"
+    }
+  }).then(res => {
+    console.log(res.data.message)
+  })
   return (
-    <div className="App">
-      <BrowserRouter>
-        <Routing />
-      </BrowserRouter>
+    <div className="container">
+      <h1>Gestion des etudiants</h1>
+      <AddStudent />
     </div>
   );
 }
