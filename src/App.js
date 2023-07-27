@@ -1,14 +1,19 @@
 import '@/App.css';
-// import AddLearner from '@/Learner/AddLearner';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+
+import AddLearner from '@/Learner/AddLearner';
 import ListLearner from '@/Learner/ListLearner';
 
 
 function App() {
   return (
-    <div className="container">
-      <h1>Gestion des etudiants</h1>
-      <ListLearner />
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path='/' element={<ListLearner/>}/>
+        <Route path='/learners' element={<ListLearner/>}/>
+        <Route path='/learner' element={<AddLearner/>}/>
+      </Routes>
+    </BrowserRouter>
   );
 }
 
