@@ -1,22 +1,13 @@
 import '@/App.css';
-import AddStudent from './student/AddStudent';
-import Axios from 'axios';
+// import AddLearner from '@/Learner/AddLearner';
+import ListLearner from '@/Learner/ListLearner';
 
 
 function App() {
-  Axios({
-    method: "GET",
-    url: "http://localhost:5000/api",
-    headers: {
-      "Content-Type": "application/json"
-    }
-  }).then(res => {
-    console.log(res.data.message)
-  })
   return (
     <div className="container">
       <h1>Gestion des etudiants</h1>
-      <AddStudent />
+      <ListLearner />
     </div>
   );
 }

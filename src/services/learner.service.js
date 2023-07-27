@@ -1,4 +1,4 @@
-import httpClient from '../axios';
+import httpClient from '@/axios';
 
 const getAll = () => {
     return httpClient.get('/learners');
@@ -7,4 +7,5 @@ const getAll = () => {
 const create = (data) => {
     return httpClient.put('/learners', data);
 }
-export default { getAll, create };
+// eslint-disable-next-line import/no-anonymous-default-export
+export default {getAll, create};

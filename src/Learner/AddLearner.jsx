@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import learnerService from '../services/learner.service';
+import learnerService from '@/services/learner.service';
 import { useParams } from 'react-router-dom';
 
 
