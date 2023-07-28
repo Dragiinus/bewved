@@ -1,16 +1,23 @@
 import httpClient from '@/axios';
 
 const getAll = () => {
-    return httpClient.get('/learners');
+  return httpClient.get('/learners');
 }
 
 const create = (data) => {
-    return httpClient.put('/learners', data);
+  return httpClient.put('/learners', data); // Use POST for creating a new learner
 }
 
-const remove = id => {
-    return httpClient.delete(`/learners/${id}`);
+const update = (id, data) => {
+  return httpClient.patch(`/learners/${id}`, data); // Use PATCH for updating an existing learner
 }
 
-// eslint-disable-next-line import/no-anonymous-default-export
-export default {getAll, create, remove};
+const getData = (id) => {
+  return httpClient.get(`/learners/${id}`);
+}
+
+const remove = (id) => {
+  return httpClient.delete(`/learners/${id}`);
+}
+
+export default { getAll, create, update, getData, remove };
