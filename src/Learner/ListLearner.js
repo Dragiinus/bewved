@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import learnerService from '@/services/learner.service';
 import { Link } from 'react-router-dom';
 import sessionService from '../services/session.service';
@@ -96,11 +98,9 @@ export default function ListLearner() {
         </div>
       </div>
 
-      
-
-      <h4 className="text-center">List Learner</h4>
+      <h4 className="text-center mt-4">List Learner</h4>
       <br />
-      <table className="table table-stripped table-bordered">
+      <table className="table table-stripped table-bordered text-center align-middle">
         <thead>
           <tr>
             <th>Session</th>
@@ -108,6 +108,7 @@ export default function ListLearner() {
             <th>Prénom</th>
             <th>Genre</th>
             <th>Age</th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -119,16 +120,14 @@ export default function ListLearner() {
               <td>{getGenderName(learner.genderLearner)}</td>
               <td>{learner.ageLearner}</td>
               <td>
-                <Link className="btn btn-info" to={`/updateLearner/${learner.idLearner}`}>
-                  Update
+                <Link className="btn btn-info btn-sm m-1" to={`/updateLearner/${learner.idLearner}`}>
+                  <FontAwesomeIcon icon={faEdit} /> {/* Icône du crayon */}
                 </Link>
-              </td>
-              <td>
                 <button
-                  className="btn btn-danger"
+                  className="btn btn-danger btn-sm"
                   onClick={(e) => handleDelete(learner.idLearner)}
                 >
-                  Supprimer
+                  <FontAwesomeIcon icon={faTrash} /> {/* Icône de la croix */}
                 </button>
               </td>
             </tr>
