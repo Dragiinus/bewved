@@ -1,57 +1,56 @@
 import React, { useEffect, useState } from 'react';
+import { Link, useParams, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import learnerService from '@/services/learner.service';
-import { Link, useNavigate } from 'react-router-dom';
-import sessionService from '../services/session.service';
+import sessionService from '@/services/session.service';
 
-export default function ListLearner() {
+export default function SessionLearners() {
+  const { sessionId } = useParams();
   const [learners, setLearners] = useState([]);
   const [sessions, setSessions] = useState([]);
-  const [selectedSession, setSelectedSession] = useState('all');
+  const [selectedSession, setSelectedSession] = useState('');
 
   useEffect(() => {
-    listLearner();
+    listLearnersBySession();
     getListSessions();
+    setSelectedSession(sessionId);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const listLearner = () => {
-    learnerService
-      .getAll()
-      .then((res) => {
-        console.log('Liste learners', res.data.data);
-        setLearners(res.data.data);
-      })
-      .catch((err) => {
-        console.log('Error', err);
-      });
-  };
+  useEffect(() => {
+    // Get the name of the selected session
+    const selectedSessionName = sessions.find((session) => session.idsession === parseInt(selectedSession, 10));
+    if (selectedSessionName) {
+      document.title = `Session: ${selectedSessionName.nameClass}`;
+    }
+  }, [selectedSession, sessions]);
 
-  const getSessionName = (sessionId) => {
-    const session = sessions.find((session) => session.idsession === sessionId);
-    return session ? session.nameClass : 'Unknown Session';
+  const listLearnersBySession = () => {
+    if (sessionId && sessionId !== 'all') {
+      learnerService
+        .getAll()
+        .then((res) => {
+          const learnersBySession = res.data.data.filter(
+            (learner) => learner.idsession === parseInt(sessionId, 10)
+          );
+          setLearners(learnersBySession);
+        })
+        .catch((err) => {
+          console.log('Error', err);
+        });
+    } else {
+      // If the selected session is "all" or invalid, fetch all learners
+      learnerService
+        .getAll()
+        .then((res) => {
+          setLearners(res.data.data);
+        })
+        .catch((err) => {
+          console.log('Error', err);
+        });
+    }
   };
-
-  const getGenderName = (genderCode) => {
-    return genderCode === 1 ? 'Homme' : genderCode === 2 ? 'Femme' : 'Unknown Gender';
-  };
-
-  const getListSessions = () => {
-    sessionService
-      .getList()
-      .then((res) => {
-        console.log('List Session', res.data.data);
-        setSessions(res.data.data);
-      })
-      .catch((err) => {
-        console.log('Erreur', err);
-      });
-  };
-
-  // Filtrer les apprenants en fonction de la session sélectionnée
-  const filteredLearners = selectedSession === 'all'
-    ? learners
-    : learners.filter((learner) => learner.idsession === parseInt(selectedSession, 10));
 
   const handleDelete = (idLearner) => {
     // Prompt for confirmation before deletion
@@ -72,11 +71,28 @@ export default function ListLearner() {
     }
   };
 
-  const navigate = useNavigate(); // Get the navigate function from react-router-dom
+  const getGenderName = (genderCode) => {
+    return genderCode === 1 ? 'Homme' : genderCode === 2 ? 'Femme' : 'Unknown Gender';
+  };
 
-  const handleSessionChange = (e) => {
+  const getListSessions = () => {
+    sessionService
+      .getList()
+      .then((res) => {
+        console.log('List Session', res.data.data);
+        setSessions(res.data.data);
+      })
+      .catch((err) => {
+        console.log('Erreur', err);
+      });
+  };
+
+  const navigate = useNavigate();
+
+  const handleSelectSession = (e) => {
     setSelectedSession(e.target.value);
-    navigate(`/sessions/${e.target.value}`); // Perform the navigation to the selected session
+    // Redirect to the selected session page
+    navigate(`/sessions/${e.target.value}`);
   };
 
   return (
@@ -86,7 +102,7 @@ export default function ListLearner() {
           {/* Liste déroulante pour choisir la session */}
           <select
             value={selectedSession}
-            onChange={handleSessionChange}
+            onChange={handleSelectSession}
             className="form-select"
           >
             <option value="all">Toutes les sessions</option>
@@ -99,18 +115,20 @@ export default function ListLearner() {
         </div>
         <div className="col-md-6 d-flex justify-content-end">
           {/* Bouton "Add Learner" redirigeant vers la page d'ajout d'un learner */}
-          <Link to="/learner" className="btn btn-primary">
+          <Link to="/addLearner" className="btn btn-primary">
             Add Learner
           </Link>
         </div>
       </div>
 
-      <h4 className="text-center mt-4">List Learner</h4>
+      <h4 className="text-center mt-4">
+        {selectedSession === 'all' ? 'All Sessions' : sessions.find(session => session.idsession === parseInt(selectedSession, 10))?.nameClass || ''}
+      </h4>
+
       <br />
       <table className="table table-stripped table-bordered text-center align-middle">
         <thead>
           <tr>
-            <th>Session</th>
             <th>Nom</th>
             <th>Prénom</th>
             <th>Genre</th>
@@ -119,22 +137,24 @@ export default function ListLearner() {
           </tr>
         </thead>
         <tbody>
-          {filteredLearners.map((learner) => (
+          {learners.map((learner) => (
             <tr key={learner.idLearner}>
-              <td>{getSessionName(learner.idsession)}</td>
               <td>{learner.firstNameLearner}</td>
               <td>{learner.lastNameLearner}</td>
               <td>{getGenderName(learner.genderLearner)}</td>
               <td>{learner.ageLearner}</td>
               <td>
-                <Link className="btn btn-info btn-sm m-1" to={`/updateLearner/${learner.idLearner}`}>
-                  <FontAwesomeIcon icon={faEdit} /> {/* Icône du crayon */}
+                <Link
+                  className="btn btn-info btn-sm m-1"
+                  to={`/updateLearner/${learner.idLearner}`}
+                >
+                  <FontAwesomeIcon icon={faEdit} />
                 </Link>
                 <button
                   className="btn btn-danger btn-sm"
-                  onClick={() => handleDelete(learner.idLearner)}
+                  onClick={(e) => handleDelete(learner.idLearner)}
                 >
-                  <FontAwesomeIcon icon={faTrash} /> {/* Icône de la croix */}
+                  <FontAwesomeIcon icon={faTrash} />
                 </button>
               </td>
             </tr>
