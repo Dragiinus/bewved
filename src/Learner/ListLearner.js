@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import learnerService from '@/services/learner.service';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import sessionService from '../services/session.service';
 
 export default function ListLearner() {
@@ -19,7 +19,7 @@ export default function ListLearner() {
     learnerService
       .getAll()
       .then((res) => {
-        console.log('Liste learners');
+        console.log('Liste learners', res.data.data);
         setLearners(res.data.data);
       })
       .catch((err) => {
@@ -72,6 +72,13 @@ export default function ListLearner() {
     }
   };
 
+  const navigate = useNavigate(); // Get the navigate function from react-router-dom
+
+  const handleSessionChange = (e) => {
+    setSelectedSession(e.target.value);
+    navigate(`/sessions/${e.target.value}`); // Perform the navigation to the selected session
+  };
+
   return (
     <div className="container">
       <div className="row">
@@ -79,7 +86,7 @@ export default function ListLearner() {
           {/* Liste déroulante pour choisir la session */}
           <select
             value={selectedSession}
-            onChange={(e) => setSelectedSession(e.target.value)}
+            onChange={handleSessionChange}
             className="form-select"
           >
             <option value="all">Toutes les sessions</option>
@@ -125,7 +132,7 @@ export default function ListLearner() {
                 </Link>
                 <button
                   className="btn btn-danger btn-sm"
-                  onClick={(e) => handleDelete(learner.idLearner)}
+                  onClick={() => handleDelete(learner.idLearner)}
                 >
                   <FontAwesomeIcon icon={faTrash} /> {/* Icône de la croix */}
                 </button>

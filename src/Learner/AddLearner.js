@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import learnerService from '@/services/learner.service';
-import sessionService from '../services/session.service';
+import sessionService from '@/services/session.service';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 
@@ -60,7 +60,7 @@ const AddLearner = () => {
         .update(id, learner)
         .then((res) => {
           console.log('Modification faite', res.data);
-          navigate('/learners');
+          navigate('/sessions/all');
         })
         .catch((err) => {
           console.log('Error', err);
@@ -70,7 +70,7 @@ const AddLearner = () => {
         .create(learner)
         .then((res) => {
           console.log('Validation');
-          navigate('/learners');
+          navigate('/sessions/all');
         })
         .catch((err) => {
           console.log('Error', err);
@@ -84,7 +84,7 @@ const AddLearner = () => {
         <div className="col-md-6">
           <div className="d-flex justify-content-end mb-3">
             {/* Bouton "List Learner" redirigeant vers la page de la liste des learners */}
-            <Link to="/learners" className="btn btn-primary">
+            <Link to="/sessions/all" className="btn btn-primary">
               List Learner
             </Link>
           </div>
@@ -98,7 +98,7 @@ const AddLearner = () => {
                 value={idsession}
                 className="form-control"
                 onChange={(e) => setIdSession(e.target.value)}>
-                <option disabled selected>-- Select one --</option>
+                <option value="0">-- Select one --</option>
                 {sessions.map((session) => (
                   <option key={session.idsession} value={session.idsession}>
                     {session.nameClass}
