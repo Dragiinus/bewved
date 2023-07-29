@@ -5,11 +5,11 @@ const getAll = () => {
 }
 
 const create = (data) => {
-  return httpClient.put('/learners', data); // Use POST for creating a new learner
+  return httpClient.put('/learners', data);
 }
 
 const update = (id, data) => {
-  return httpClient.patch(`/learners/${id}`, data); // Use PATCH for updating an existing learner
+  return httpClient.patch(`/learners/${id}`, data);
 }
 
 const getData = (id) => {
