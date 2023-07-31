@@ -24,12 +24,12 @@ const Table = ({ learners, handleDelete, getGenderName }) => {
             <td>{getGenderName(learner.genderLearner)}</td>
             <td>{learner.ageLearner}</td>
             <td>
-              <Link className="btn btn-info btn-sm m-1" to={`/updateLearner/${learner.idLearner}`}>
-                <FontAwesomeIcon icon={faEdit} />
-              </Link>
-              <button className="btn btn-danger btn-sm" onClick={(e) => handleDelete(learner.idLearner)}>
-                <FontAwesomeIcon icon={faTrash} />
-              </button>
+                <Link to={`/updateLearner/${learner.idLearner}`} className="btn btn-primary m-1 btn-sm">
+                    <FontAwesomeIcon icon={faEdit} />
+                </Link>
+                <button className="btn btn-danger btn-sm" onClick={(e) => handleDelete(learner.idLearner)}>
+                    <FontAwesomeIcon icon={faTrash} />
+                </button>
             </td>
           </tr>
         ))}

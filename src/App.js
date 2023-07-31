@@ -4,7 +4,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import AddLearner from '@/Pages/AddLearner';
 import Header from '@/components/Header';
 import SessionLearners from '@/Pages/SessionLearners';
-import GroupFormation from './components/GroupFormation';
+import GroupFormation from './Pages/GroupFormation';
 
 function App() {
   return (
