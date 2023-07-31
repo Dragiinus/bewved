@@ -16,7 +16,7 @@ export default function SessionLearners() {
     getListSessions();
     setSelectedSession(sessionId);
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [sessionId]);
 
   useEffect(() => {
     // Get the name of the selected session
