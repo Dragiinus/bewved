@@ -1,4 +1,3 @@
-// GroupFormation.js
 import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import Table from '@/components/Table';
@@ -117,8 +116,8 @@ export default function GroupFormation() {
 
     // Distribute learners from age groups into final groups
     let learnerCountPerGroup = 0;
-    Object.values(ageGroups).forEach((ageGroup, index) => {
-      ageGroup.forEach((learner, learnerIndex) => {
+    Object.values(ageGroups).forEach((ageGroup) => {
+      ageGroup.forEach((learner) => {
         const groupIndex = learnerCountPerGroup % 5;
         const genderGroup = learner.genderLearner === 1 ? 'males' : 'females';
 
