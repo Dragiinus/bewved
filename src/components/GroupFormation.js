@@ -7,11 +7,18 @@ import learnerService from '@/services/learner.service';
 export default function GroupFormation() {
   const { sessionId } = useParams();
   const [learners, setLearners] = useState([]);
+  const [originalLearners, setOriginalLearners] = useState([]);
+  const [sortByGender, setSortByGender] = useState(false);
 
   useEffect(() => {
     listLearnersBySession();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sessionId]);
+
+  useEffect(() => {
+    // Keep a copy of original learners when component mounts
+    setOriginalLearners([...learners]);
+  }, [learners]);
 
   const listLearnersBySession = () => {
     if (sessionId && sessionId !== 'all') {
@@ -63,14 +70,23 @@ export default function GroupFormation() {
     return genderCode === 1 ? 'Homme' : genderCode === 2 ? 'Femme' : 'Unknown Gender';
   };
 
-  // Function to group learners into five groups
+  // Function to group learners into five groups with balanced gender
   const groupLearners = () => {
-    const groups = Array(5).fill().map(() => []);
-    learners.forEach((learner, index) => {
+    // Use originalLearners for sorting by gender when enabled
+    const sortedLearners = sortByGender
+      ? originalLearners.sort((a, b) => a.genderLearner - b.genderLearner)
+      : learners;
+
+    // Divide learners into groups with balanced gender
+    const groupedLearners = Array(5).fill().map(() => ({ males: [], females: [] }));
+
+    sortedLearners.forEach((learner, index) => {
       const groupIndex = index % 5;
-      groups[groupIndex].push(learner);
+      const genderGroup = learner.genderLearner === 1 ? 'males' : 'females';
+      groupedLearners[groupIndex][genderGroup].push(learner);
     });
-    return groups;
+
+    return groupedLearners;
   };
 
   const groupedLearners = groupLearners();
@@ -82,6 +98,12 @@ export default function GroupFormation() {
         <Link to={`/sessions/${sessionId}`} className="btn btn-primary mt-3">
           Retourner à la session
         </Link>
+        <button
+          className="btn btn-success ms-3 mt-3"
+          onClick={() => setSortByGender(!sortByGender)}
+        >
+          {sortByGender ? 'Désactiver le tri par genre' : 'Activer le tri par genre'}
+        </button>
       </div>
       <h4 className="text-center mt-4">
         {sessionId === 'all' ? 'All Sessions' : `Session: ${sessionId}`}
@@ -92,7 +114,7 @@ export default function GroupFormation() {
       {groupedLearners.map((group, index) => (
         <div key={index}>
           <h5 className="text-center mt-4">Groupe {index + 1}</h5>
-          <Table learners={group} handleDelete={handleDelete} getGenderName={getGenderName} />
+          <Table learners={group.males.concat(group.females)} handleDelete={handleDelete} getGenderName={getGenderName} />
         </div>
       ))}
     </div>

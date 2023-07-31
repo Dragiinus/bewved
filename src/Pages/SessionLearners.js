@@ -111,10 +111,12 @@ export default function SessionLearners() {
             ))}
           </select>
         </div>
-        <ButtonAdd />
-        <Link className="btn btn-primary ml-3" to={`/sessions/${selectedSession}/group`}>
-          Formation des groupes
-        </Link> {/* Button to redirect to GroupFormation page */}
+        <div className='col-md-6 d-flex flex-wrap justify-content-end'>
+          <ButtonAdd />
+          <Link className="btn btn-primary m-1 ml-3" to={`/sessions/${selectedSession}/group`}>
+            Formation des groupes
+          </Link> {/* Button to redirect to GroupFormation page */}
+        </div>
       </div>
 
       <h4 className="text-center mt-4">
