@@ -5,7 +5,7 @@ import sessionService from '@/services/session.service';
 
 const Form = () => {
   let navigate = useNavigate();
-  const { idLearner } = useParams();
+  const { id } = useParams();
   const [idsession, setIdSession] = useState('');
   const [firstNameLearner, setFirstNameLearner] = useState('');
   const [lastNameLearner, setLastNameLearner] = useState('');
@@ -16,9 +16,9 @@ const Form = () => {
   useEffect(() => {
     getList();
 
-    if (idLearner) {
+    if (id) {
       learnerService
-        .getData(idLearner)
+        .getData(id)
         .then((learner) => {
           const data = learner.data;
           setFirstNameLearner(data.firstNameLearner);
@@ -31,7 +31,7 @@ const Form = () => {
           console.log('Erreur', err);
         });
     }
-  }, [idLearner]);
+  }, [id]);
 
   function getList() {
     sessionService
@@ -48,7 +48,7 @@ const Form = () => {
   const saveData = (e) => {
     e.preventDefault();
     const learner = {
-      idLearner,
+        id,
       firstNameLearner,
       lastNameLearner,
       genderLearner,
@@ -56,9 +56,9 @@ const Form = () => {
       idsession,
     };
 
-    if (idLearner) {
+    if (id) {
       learnerService
-        .update(idLearner, learner)
+        .update(id, learner)
         .then((res) => {
           console.log('Modification faite', res.data);
           navigate('/sessions/all');
@@ -81,7 +81,7 @@ const Form = () => {
 
   return (
     <div>
-      <h4 className="text-center">{idLearner ? 'Edit Student' : 'Add Student'}</h4>
+      <h4 className="text-center">{id ? 'Edit Student' : 'Add Student'}</h4>
       <form onSubmit={saveData}>
         <div className="form-group">
           <label>Session :</label>
