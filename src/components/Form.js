@@ -81,7 +81,7 @@ const Form = () => {
 
   return (
     <div>
-      <h4 className="text-center">{id ? 'Edit Student' : 'Add Student'}</h4>
+      <h4 className="text-center">{id ? 'Modifier un apprenant' : 'Ajouter un apprenant'}</h4>
       <form onSubmit={saveData}>
         <div className="form-group">
           <label>Session :</label>
@@ -150,9 +150,11 @@ const Form = () => {
             onChange={(e) => setAgeLearner(e.target.value)}
           />
         </div>
-        <button type="submit" className="btn btn-primary">
-          Save
-        </button>
+        <div className='col-md-6 d-flex flex-wrap w-100 justify-content-end'>
+          <button type="submit" className="btn btn-primary justify-content-end">
+            Save
+          </button>
+        </div>
       </form>
     </div>
   );
