@@ -37,7 +37,7 @@ Dans le cas où il y a un nombre d'étudiant n'etant pas un multiple de 5, il y 
 
 ### BACKEND
 
-1- Cloner également le backend a cette adresse : https://github.com/Dragiinus/Bewved_Back
+1- Cloner également le backend a cette adresse : [https://github.com/Dragiinus/Bewved_Back](https://github.com/Dragiinus/Bewved_Back)
 
 2- Dans le terminal, tappez "npm i" pour installer les dependencies.
 
